@@ -7,11 +7,9 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
 import { firebaseConfig } from "./firebase-config.ts";
-import { productsCollection } from "./collections/products.tsx";
+import { techBlogsCollection } from "./collections/techBlogs.tsx";
 
 export default function App() {
-
-
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
                                                                                 user,
                                                                                 authController
@@ -34,7 +32,7 @@ export default function App() {
         name={"My Online Shop"}
         plugins={[]}
         authentication={myAuthenticator}
-        collections={[productsCollection]}
+        collections={[techBlogsCollection]}
         firebaseConfig={firebaseConfig}
     />;
 }
