@@ -7,14 +7,11 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
 import { firebaseConfig } from "./firebase-config.ts";
-import { techBlogsCollection } from "./collections/techBlogs.tsx";
+import { techBlogCollection } from "./collections/techBlogs.tsx";
+import { recipeCollection } from "./collections/recipes.tsx";
 
 export default function App() {
-    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
-                                                                                user,
-                                                                                authController
-                                                                            }) => {
-
+    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({ user, authController }) => {
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
         }
@@ -32,7 +29,7 @@ export default function App() {
         name={"My Online Shop"}
         plugins={[]}
         authentication={myAuthenticator}
-        collections={[techBlogsCollection]}
+        collections={[techBlogCollection, recipeCollection]}
         firebaseConfig={firebaseConfig}
     />;
 }

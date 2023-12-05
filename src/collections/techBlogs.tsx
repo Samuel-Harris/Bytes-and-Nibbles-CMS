@@ -23,7 +23,7 @@ export interface TechBlogEntry {
     sections: TechBlogEntrySection[];
 }
 
-export const techBlogsCollection = buildCollection<TechBlogEntry>({
+export const techBlogCollection = buildCollection<TechBlogEntry>({
     name: "Tech blogs",
     singularName: "Tech blog entry",
     path: "tech_blogs",
@@ -49,7 +49,7 @@ export const techBlogsCollection = buildCollection<TechBlogEntry>({
         }),
         publishDate: buildProperty ({
             dataType: "date",
-            name: "Published date",
+            name: "Publish date",
             autoValue: "on_create"
         }),
         lastModifiedDate: buildProperty ({
