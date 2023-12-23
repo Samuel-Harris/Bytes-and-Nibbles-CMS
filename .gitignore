@@ -1,9 +1,11 @@
 # build files
 node_modules/
 dist/
+
+# MacOS files
 .DS_Store
 
-# IDE files
+# intellij files
 .idea/
 
 # firebase config
