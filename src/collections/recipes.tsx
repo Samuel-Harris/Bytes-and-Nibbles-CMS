@@ -25,7 +25,7 @@ export interface Recipe {
 export const recipeCollection = buildCollection<Recipe>({
     name: "Recipes",
     singularName: "Recipe",
-    path: "recipes",
+    path: "v1_recipes",
     permissions: ({ authController }) => ({
         edit: true,
         create: true,

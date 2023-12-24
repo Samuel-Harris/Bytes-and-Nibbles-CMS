@@ -1,8 +1,12 @@
-import { buildCollection, buildProperty } from "firecms";
+import { UploadedFileContext, buildCollection, buildProperty } from "firecms";
 
-interface TechBlogEntryParagraph {
-    type: "text";
-    value: string;
+interface Paragraph {
+    paragraph: string;
+}
+
+interface Code {
+    language: string;
+    code: string;
 }
 
 interface CaptionedImage {
@@ -10,23 +14,23 @@ interface CaptionedImage {
     caption: string;
 }
 
-interface TechBlogEntrySection {
+interface Section {
     title: string;
-    body: (TechBlogEntryParagraph | CaptionedImage)[];
+    body: (Paragraph | Code | CaptionedImage)[];
 }
 
-export interface TechBlogEntry {
+export interface BlogEntry {
     title: string;
     isPublished: boolean;
     publishDate: Date;
     lastModifiedDate: Date;
-    sections: TechBlogEntrySection[];
+    sections: Section[];
 }
 
-export const techBlogCollection = buildCollection<TechBlogEntry>({
+export const techBlogCollection = buildCollection<BlogEntry>({
     name: "Tech blogs",
     singularName: "Tech blog entry",
-    path: "tech_blogs",
+    path: "v1_tech_blogs",
     permissions: ({ authController }) => ({
         edit: true,
         create: true,
@@ -86,8 +90,32 @@ export const techBlogCollection = buildCollection<TechBlogEntry>({
                             properties: {
                                 text: buildProperty({
                                     dataType: "string",
-                                    name: "Text",
+                                    name: "Paragraph",
                                     markdown: true,
+                                    multiline: true,
+                                    validation: {
+                                        required: true,
+                                    },
+                                }),
+                                code: buildProperty({
+                                    dataType: "map",
+                                    properties: {
+                                        caption: buildProperty({
+                                            dataType: "string",
+                                            name: "Language",
+                                            validation: {
+                                                required: true,
+                                            },
+                                        }),
+                                        image: buildProperty({
+                                            dataType: "string",
+                                            name: "Code",
+                                            multiline: true,
+                                            validation: {
+                                                required: true,
+                                            },
+                                        }),
+                                    }
                                 }),
                                 captionedImage: buildProperty({
                                     dataType: "map",
@@ -100,6 +128,9 @@ export const techBlogCollection = buildCollection<TechBlogEntry>({
                                                 acceptedFiles: ["image/*"],
                                                 metadata: {
                                                     cacheControl: "max-age=1000000"
+                                                },
+                                                fileName: (context: UploadedFileContext) => {
+                                                    return context.file.name;
                                                 }
                                             },
                                             validation: {
