@@ -31,11 +31,6 @@ export const techBlogCollection = buildCollection<BlogEntry>({
     name: "Tech blogs",
     singularName: "Tech blog entry",
     path: "v1_tech_blogs",
-    // permissions: ({ authController }) => ({
-    //     edit: true,
-    //     create: true,
-    //     delete: true
-    // }),
     properties: {
         title: buildProperty ({
             dataType: "string",
