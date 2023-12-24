@@ -31,11 +31,11 @@ export const techBlogCollection = buildCollection<BlogEntry>({
     name: "Tech blogs",
     singularName: "Tech blog entry",
     path: "v1_tech_blogs",
-    permissions: ({ authController }) => ({
-        edit: true,
-        create: true,
-        delete: true
-    }),
+    // permissions: ({ authController }) => ({
+    //     edit: true,
+    //     create: true,
+    //     delete: true
+    // }),
     properties: {
         title: buildProperty ({
             dataType: "string",
@@ -88,7 +88,7 @@ export const techBlogCollection = buildCollection<BlogEntry>({
                             typeField: "type",
                             valueField: "value",
                             properties: {
-                                text: buildProperty({
+                                paragraph: buildProperty({
                                     dataType: "string",
                                     name: "Paragraph",
                                     markdown: true,
