@@ -1,6 +1,7 @@
 # build files
 node_modules/
 dist/
+.vite/
 
 # MacOS files
 .DS_Store

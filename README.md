@@ -1,2 +1,2 @@
 # Nibbles-and-Bytes
-My tech and food blog.
+My tech and food blog CMS.

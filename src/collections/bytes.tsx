@@ -19,22 +19,58 @@ interface Section {
     body: (Paragraph | Code | CaptionedImage)[];
 }
 
-export interface BlogEntry {
+export interface Byte {
     title: string;
+    thumbnail: string;
+    coverPhoto: string;
     isPublished: boolean;
     publishDate: Date;
     lastModifiedDate: Date;
     sections: Section[];
 }
 
-export const techBlogCollection = buildCollection<BlogEntry>({
-    name: "Tech blogs",
-    singularName: "Tech blog entry",
-    path: "v1_tech_blogs",
+export const byteCollection = buildCollection<Byte>({
+    name: "Bytes",
+    singularName: "Byte",
+    path: "v1_bytes",
     properties: {
         title: buildProperty ({
             dataType: "string",
             name: "Title",
+            validation: {
+                required: true,
+            },
+        }),
+        thumbnail: buildProperty({
+            dataType: "string",
+            name: "Thumbnail",
+            storage: {
+                storagePath: "images/bytes/thumbnails",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
+                },
+                fileName: (context: UploadedFileContext) => {
+                    return context.file.name;
+                }
+            },
+            validation: {
+                required: true,
+            },
+        }),
+        coverPhoto: buildProperty({
+            dataType: "string",
+            name: "Cover photo",
+            storage: {
+                storagePath: "images/bytes/coverPhotos",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
+                },
+                fileName: (context: UploadedFileContext) => {
+                    return context.file.name;
+                }
+            },
             validation: {
                 required: true,
             },
@@ -119,7 +155,7 @@ export const techBlogCollection = buildCollection<BlogEntry>({
                                             dataType: "string",
                                             name: "Image",
                                             storage: {
-                                                storagePath: "images",
+                                                storagePath: "images/bytes/bodyImages",
                                                 acceptedFiles: ["image/*"],
                                                 metadata: {
                                                     cacheControl: "max-age=1000000"
