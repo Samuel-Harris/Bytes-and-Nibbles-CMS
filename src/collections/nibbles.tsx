@@ -6,26 +6,21 @@ interface Ingredient {
     measurement: string,
 }
 
-interface Step {
-    instruction: string,
-    image: string
-}
-
-export interface Recipe {
+export interface Nibble {
     title: string,
     source: string,
     ingredients: Ingredient[],
-    steps: Step[]
+    steps: string[]
     isPublished: boolean,
     publishDate: Date,
     lastModifiedDate: Date,
     timeTakenMinutes: number,
 }
 
-export const recipeCollection = buildCollection<Recipe>({
-    name: "Recipes",
-    singularName: "Recipe",
-    path: "v1_recipes",
+export const nibbleCollection = buildCollection<Nibble>({
+    name: "Nibble",
+    singularName: "Nibble",
+    path: "v1_nibbles",
     properties: {
         title: buildProperty ({
             dataType: "string",
