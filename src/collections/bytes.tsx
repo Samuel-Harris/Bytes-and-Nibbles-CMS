@@ -21,6 +21,7 @@ interface Section {
 
 export interface Byte {
     title: string;
+    subtitle: string;
     thumbnail: string;
     coverPhoto: string;
     isPublished: boolean;
@@ -37,6 +38,13 @@ export const byteCollection = buildCollection<Byte>({
         title: buildProperty ({
             dataType: "string",
             name: "Title",
+            validation: {
+                required: true,
+            },
+        }),
+        subtitle: buildProperty ({
+            dataType: "string",
+            name: "Subtitle",
             validation: {
                 required: true,
             },
