@@ -8,6 +8,7 @@ interface Ingredient {
 
 export interface Nibble {
     title: string,
+    slug: string;
     source: string,
     ingredients: Ingredient[],
     steps: string[]
@@ -27,6 +28,16 @@ export const nibbleCollection = buildCollection<Nibble>({
             name: "Title",
             validation: {
                 required: true,
+            },
+        }),
+        slug: buildProperty ({
+            dataType: "string",
+            name: "Slug",
+            validation: {
+                required: true,
+                unique: true,
+                min: 5,
+                matches: "^[a-z][a-z-]*[a-z]+$"
             },
         }),
         source: buildProperty ({
