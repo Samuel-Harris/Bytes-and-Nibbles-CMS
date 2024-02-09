@@ -41,6 +41,7 @@ export const byteCollection = buildCollection<Byte>({
             name: "Title",
             validation: {
                 required: true,
+                unique: true,
             },
         }),
         subtitle: buildProperty ({

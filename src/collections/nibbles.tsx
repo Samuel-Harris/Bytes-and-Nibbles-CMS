@@ -28,6 +28,7 @@ export const nibbleCollection = buildCollection<Nibble>({
             name: "Title",
             validation: {
                 required: true,
+                unique: true,
             },
         }),
         slug: buildProperty ({
