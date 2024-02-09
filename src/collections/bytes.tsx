@@ -22,6 +22,7 @@ interface Section {
 export interface Byte {
     title: string;
     subtitle: string;
+    slug: string;
     thumbnail: string;
     coverPhoto: string;
     isPublished: boolean;
@@ -47,6 +48,16 @@ export const byteCollection = buildCollection<Byte>({
             name: "Subtitle",
             validation: {
                 required: true,
+            },
+        }),
+        slug: buildProperty ({
+            dataType: "string",
+            name: "Slug",
+            validation: {
+                required: true,
+                unique: true,
+                min: 5,
+                matches: "^[a-z][a-z-]*[a-z]+$"
             },
         }),
         thumbnail: buildProperty({
