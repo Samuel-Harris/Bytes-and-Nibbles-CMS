@@ -37,7 +37,7 @@ export const nibbleCollection = buildCollection<Nibble>({
                 required: true,
                 unique: true,
                 min: 5,
-                matches: "^[a-z][a-z-]*[a-z]+$"
+                matches: "^[a-z][a-z0-9-]*[a-z0-9]+$"
             },
         }),
         source: buildProperty ({
