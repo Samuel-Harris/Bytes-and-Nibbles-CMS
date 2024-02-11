@@ -143,7 +143,6 @@ export const byteCollection = buildCollection<Byte>({
                                     dataType: "string",
                                     name: "Paragraph",
                                     markdown: true,
-                                    multiline: true,
                                     validation: {
                                         required: true,
                                     },
