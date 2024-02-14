@@ -19,7 +19,7 @@ export interface Nibble {
 }
 
 export const nibbleCollection = buildCollection<Nibble>({
-    name: "Nibble",
+    name: "Nibbles",
     singularName: "Nibble",
     path: "v1_nibbles",
     properties: {
