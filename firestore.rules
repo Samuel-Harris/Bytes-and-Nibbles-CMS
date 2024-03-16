@@ -9,5 +9,9 @@ service cloud.firestore {
     match /v1_bytes/{tech_blog} {
       allow read: if resource.data.isPublished == true;
     }
+
+    match /v1_byte_series/{byte_series} {
+      allow read: if true;
+    }
   }
 }
