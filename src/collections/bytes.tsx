@@ -1,4 +1,4 @@
-import { UploadedFileContext, buildCollection, buildProperty } from "firecms";
+import { EntityReference, UploadedFileContext, buildCollection, buildProperty } from "firecms";
 
 interface Paragraph {
     paragraph: string;
@@ -22,6 +22,7 @@ interface Section {
 export interface Byte {
     title: string;
     subtitle: string;
+    series: EntityReference;
     slug: string;
     thumbnail: string;
     coverPhoto: string;
@@ -47,6 +48,14 @@ export const byteCollection = buildCollection<Byte>({
         subtitle: buildProperty ({
             dataType: "string",
             name: "Subtitle",
+            validation: {
+                required: true,
+            },
+        }),
+        series: buildProperty({
+            dataType: "reference",
+            path: "v1_byte_series",
+            name: "Series",
             validation: {
                 required: true,
             },
