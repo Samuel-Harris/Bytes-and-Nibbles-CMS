@@ -5,6 +5,7 @@ import "@fontsource/ibm-plex-mono";
 
 import { firebaseConfig } from "./firebase-config.ts";
 import { byteCollection } from "./collections/bytes.tsx";
+import { byteSeriesCollection } from "./collections/byteSeries.tsx";
 import { nibbleCollection } from "./collections/nibbles.tsx";
 import { useCallback } from "react";
 import { User } from "firebase/auth";
@@ -23,7 +24,7 @@ export default function App() {
         name={"Bytes and Nibbles CMS"}
         plugins={[]}
         authentication={myAuthenticator}
-        collections={[byteCollection, nibbleCollection]}
+        collections={[byteCollection, byteSeriesCollection, nibbleCollection]}
         firebaseConfig={firebaseConfig}
         logo={"/logo.png"}
     />;
