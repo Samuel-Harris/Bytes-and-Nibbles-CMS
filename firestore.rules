@@ -13,5 +13,9 @@ service cloud.firestore {
     match /v1_byte_series/{byte_series} {
       allow read: if true;
     }
+
+    match /v1_nibbles/{recipe} {
+      allow read: if resource.data.isPublished == true;
+    }
   }
 }
