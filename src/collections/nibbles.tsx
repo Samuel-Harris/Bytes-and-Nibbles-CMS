@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "firecms";
+import { UploadedFileContext, buildCollection, buildProperty } from "firecms";
 
 interface Ingredient {
     name: string,
@@ -8,6 +8,8 @@ interface Ingredient {
 
 export interface Nibble {
     title: string,
+    thumbnail: string;
+    coverPhoto: string;
     slug: string;
     source: string,
     ingredients: Ingredient[],
@@ -29,6 +31,40 @@ export const nibbleCollection = buildCollection<Nibble>({
             validation: {
                 required: true,
                 unique: true,
+            },
+        }),
+        thumbnail: buildProperty({
+            dataType: "string",
+            name: "Thumbnail",
+            storage: {
+                storagePath: "images/nibbles/thumbnails",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
+                },
+                fileName: (context: UploadedFileContext) => {
+                    return context.file.name;
+                }
+            },
+            validation: {
+                required: true,
+            },
+        }),
+        coverPhoto: buildProperty({
+            dataType: "string",
+            name: "Cover photo",
+            storage: {
+                storagePath: "images/nibbles/coverPhotos",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
+                },
+                fileName: (context: UploadedFileContext) => {
+                    return context.file.name;
+                }
+            },
+            validation: {
+                required: true,
             },
         }),
         slug: buildProperty ({
