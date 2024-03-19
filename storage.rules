@@ -17,5 +17,13 @@ service firebase.storage {
     match /images/bytes/thumbnails/{thumbnail} {
       allow read: if true;
     }
+
+    match /images/nibbles/coverPhotos/{coverPhoto} {
+      allow read: if true;
+    }
+
+    match /images/nibbles/thumbnails/{thumbnail} {
+      allow read: if true;
+    }
   }
 }
