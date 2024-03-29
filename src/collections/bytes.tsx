@@ -4,11 +4,6 @@ interface Paragraph {
     paragraph: string;
 }
 
-interface Code {
-    language: string;
-    code: string;
-}
-
 interface CaptionedImage {
     image: string;
     caption: string;
@@ -16,7 +11,7 @@ interface CaptionedImage {
 
 interface Section {
     title: string;
-    body: (Paragraph | Code | CaptionedImage)[];
+    body: (Paragraph | CaptionedImage)[];
 }
 
 export interface Byte {
@@ -155,26 +150,6 @@ export const byteCollection = buildCollection<Byte>({
                                     validation: {
                                         required: true,
                                     },
-                                }),
-                                code: buildProperty({
-                                    dataType: "map",
-                                    properties: {
-                                        caption: buildProperty({
-                                            dataType: "string",
-                                            name: "Language",
-                                            validation: {
-                                                required: true,
-                                            },
-                                        }),
-                                        image: buildProperty({
-                                            dataType: "string",
-                                            name: "Code",
-                                            multiline: true,
-                                            validation: {
-                                                required: true,
-                                            },
-                                        }),
-                                    }
                                 }),
                                 captionedImage: buildProperty({
                                     dataType: "map",
