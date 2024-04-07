@@ -4,6 +4,7 @@ interface Ingredient {
   name: string;
   quantity: number;
   measurement: string;
+  optional: boolean;
 }
 
 export interface Nibble {
@@ -12,6 +13,7 @@ export interface Nibble {
   coverPhoto: string;
   slug: string;
   source: string;
+  nServings: number;
   ingredients: Ingredient[];
   steps: string[];
   isPublished: boolean;
@@ -84,6 +86,13 @@ export const nibbleCollection = buildCollection<Nibble>({
         required: true,
       },
     }),
+    nServings: buildProperty({
+      dataType: "number",
+      name: "Number of servings",
+      validation: {
+        required: true,
+      },
+    }),
     ingredients: buildProperty({
       dataType: "array",
       name: "Ingredients",
@@ -104,13 +113,17 @@ export const nibbleCollection = buildCollection<Nibble>({
           quantity: buildProperty({
             dataType: "number",
             name: "Quantity",
-            validation: {
-              required: true,
-            },
           }),
           measurement: buildProperty({
             dataType: "string",
             name: "Measurement",
+          }),
+          optional: buildProperty({
+            dataType: "boolean",
+            name: "Optional",
+            validation: {
+              required: true,
+            },
           }),
         },
       },
