@@ -11,3 +11,5 @@ dist/
 
 # firebase config
 src/firebase-config.ts
+firestore.rules
+storage.rules
