@@ -9,14 +9,14 @@ interface CaptionedImage {
     caption: string;
 }
 
-interface SubSection {
+interface Subsection {
     title: string;
     body: (Paragraph | CaptionedImage)[];
 }
 
 interface Section {
     title: string;
-    body: (SubSection | Paragraph | CaptionedImage)[];
+    body: (Subsection | Paragraph | CaptionedImage)[];
 }
 
 export interface Byte {
@@ -189,9 +189,9 @@ export const byteCollection = buildCollection<Byte>({
                             typeField: "type",
                             valueField: "value",
                             properties: {
-                                subSection: buildProperty ({
+                                subsection: buildProperty ({
                                     dataType: "map",
-                                    name: "SubSection",
+                                    name: "Subsection",
                                     properties: {
                                         title: buildProperty({
                                             dataType: "string",
