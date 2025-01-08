@@ -9,9 +9,14 @@ interface CaptionedImage {
     caption: string;
 }
 
-interface Section {
+interface SubSection {
     title: string;
     body: (Paragraph | CaptionedImage)[];
+}
+
+interface Section {
+    title: string;
+    body: (SubSection | Paragraph | CaptionedImage)[];
 }
 
 export interface Byte {
@@ -26,6 +31,47 @@ export interface Byte {
     lastModifiedDate: Date;
     sections: Section[];
 }
+
+const paragraphProperty = buildProperty({
+    dataType: "string",
+    name: "Paragraph",
+    markdown: true,
+    validation: {
+        required: true,
+    },
+});
+
+const captionedImageProperty = buildProperty({
+    dataType: "map",
+    name: "Captioned image",
+    properties: {
+        image: buildProperty({
+            dataType: "string",
+            name: "Image",
+            storage: {
+                storagePath: "images/bytes/bodyImages",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
+                },
+                fileName: (context: UploadedFileContext) => {
+                    return context.file.name;
+                }
+            },
+            validation: {
+                required: true,
+            },
+        }),
+        caption: buildProperty({
+            dataType: "string",
+            name: "Caption",
+            markdown: true,
+            validation: {
+                required: true,
+            },
+        }),
+    }
+});
 
 export const byteCollection = buildCollection<Byte>({
     name: "Bytes",
@@ -135,7 +181,7 @@ export const byteCollection = buildCollection<Byte>({
                     }),
                     body: buildProperty({
                         dataType: "array",
-                        name: "Body",
+                        name: "Section body",
                         validation: {
                             required: true
                         },
@@ -143,44 +189,36 @@ export const byteCollection = buildCollection<Byte>({
                             typeField: "type",
                             valueField: "value",
                             properties: {
-                                paragraph: buildProperty({
-                                    dataType: "string",
-                                    name: "Paragraph",
-                                    markdown: true,
-                                    validation: {
-                                        required: true,
-                                    },
-                                }),
-                                captionedImage: buildProperty({
+                                subSection: buildProperty ({
                                     dataType: "map",
+                                    name: "SubSection",
                                     properties: {
-                                        image: buildProperty({
+                                        title: buildProperty({
                                             dataType: "string",
-                                            name: "Image",
-                                            storage: {
-                                                storagePath: "images/bytes/bodyImages",
-                                                acceptedFiles: ["image/*"],
-                                                metadata: {
-                                                    cacheControl: "max-age=1000000"
-                                                },
-                                                fileName: (context: UploadedFileContext) => {
-                                                    return context.file.name;
+                                            name: "Subheading",
+                                            validation: {
+                                                required: true
+                                            },
+                                        }),
+                                        body: buildProperty({
+                                            dataType: "array",
+                                            name: "Subsection body",
+                                            validation: {
+                                                required: true
+                                            },
+                                            oneOf: {
+                                                typeField: "type",
+                                                valueField: "value",
+                                                properties: {
+                                                    paragraph: paragraphProperty,
+                                                    captionedImage: captionedImageProperty,
                                                 }
-                                            },
-                                            validation: {
-                                                required: true,
-                                            },
+                                            }
                                         }),
-                                        caption: buildProperty({
-                                            dataType: "string",
-                                            name: "Caption",
-                                            markdown: true,
-                                            validation: {
-                                                required: true,
-                                            },
-                                        }),
-                                    }
+                                    }, 
                                 }),
+                                paragraph: paragraphProperty,
+                                captionedImage: captionedImageProperty,
                             }
                         }
                     }),
