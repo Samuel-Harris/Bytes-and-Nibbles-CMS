@@ -11,3 +11,6 @@ For the public version of this repo, I have removed the following files, which y
 Learn how to write your own authorisation-defining .rules files [here](https://firebase.google.com/docs/rules/basics).
 
 Learn how to generate your own firebase-config.ts file [here](https://support.google.com/firebase/answer/7015592).
+
+## Usage
+To use CMS, execute the comand `npm run dev` and open the CMS at [http://localhost:5173](http://localhost:5173). Changes saved in this site will automatically be reflected in Firebase.
