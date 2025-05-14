@@ -1,4 +1,6 @@
 # Bytes and Nibbles CMS
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Samuel-Harris/Bytes-and-Nibbles-CMS?utm_source=oss&utm_medium=github&utm_campaign=Samuel-Harris%2FBytes-and-Nibbles-CMS&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+
 The Content Management System (CMS) of my tech and food blog: [Bytes and Nibbles](https://bytes-and-nibbles.web.app).
 
 ## Config files 
