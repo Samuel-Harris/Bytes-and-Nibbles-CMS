@@ -1,14 +1,37 @@
-import { buildCollection, buildProperty } from "firecms";
+import {
+  buildCollection,
+  buildProperty,
+  AdditionalFieldDelegate,
+} from "@firecms/core";
+import { ColorField } from "../components/ColorField";
 
 export interface ByteSeries {
   title: string;
   accentColour: string;
 }
 
+export const colorPreviewField: AdditionalFieldDelegate<ByteSeries> = {
+  key: "accent_colour_preview",
+  name: "Accent colour",
+  Builder: ({ entity }) => {
+    const color = entity.values.accentColour;
+    return (
+      <div
+        className="w-6 h-6 rounded border border-gray-300 shadow-sm"
+        style={{ backgroundColor: color }}
+        title={`Accent color: ${color}`}
+      />
+    );
+  },
+  dependencies: ["accentColour"],
+};
+
 export const byteSeriesCollection = buildCollection<ByteSeries>({
+  id: "byte_series",
   name: "Byte series",
   singularName: "Byte series",
   path: "v1_byte_series",
+  additionalFields: [colorPreviewField],
   properties: {
     title: buildProperty({
       dataType: "string",
@@ -20,10 +43,15 @@ export const byteSeriesCollection = buildCollection<ByteSeries>({
     }),
     accentColour: buildProperty({
       dataType: "string",
-      name: "Accent hexadecimal colour",
+      name: "Accent colour (hex)",
+      description: "Choose the accent colour for this series",
+      Field: ColorField,
+      customProps: {
+        defaultColor: "#000000",
+      },
       validation: {
         required: true,
-        matches: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        matches: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
       },
     }),
   },

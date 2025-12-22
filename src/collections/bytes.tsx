@@ -1,4 +1,4 @@
-import { EntityReference, UploadedFileContext, buildCollection, buildProperty } from "firecms";
+import { EntityReference, UploadedFileContext, buildCollection, buildProperty } from "@firecms/core";
 
 interface Paragraph {
     paragraph: string;
@@ -74,6 +74,7 @@ const captionedImageProperty = buildProperty({
 });
 
 export const byteCollection = buildCollection<Byte>({
+    id: "bytes",
     name: "Bytes",
     singularName: "Byte",
     path: "v1_bytes",

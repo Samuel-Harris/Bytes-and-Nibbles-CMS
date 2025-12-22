@@ -1,4 +1,8 @@
-import { UploadedFileContext, buildCollection, buildProperty } from "firecms";
+import {
+  UploadedFileContext,
+  buildCollection,
+  buildProperty,
+} from "@firecms/core";
 
 interface Ingredient {
   name: string;
@@ -23,6 +27,7 @@ export interface Nibble {
 }
 
 export const nibbleCollection = buildCollection<Nibble>({
+  id: "nibbles",
   name: "Nibbles",
   singularName: "Nibble",
   path: "v1_nibbles",
