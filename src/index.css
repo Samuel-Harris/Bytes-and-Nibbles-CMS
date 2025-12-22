@@ -1,14 +1,18 @@
+@import "@firecms/ui/index.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-
-  color-scheme: light dark;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  --fcms-primary: #0070f4;
+  --fcms-primary-bg: #0061e610;
+  --fcms-secondary: #ff5b79;
 }
 
 body {
-  margin: 0;
+  @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
+}
+a {
+  @apply text-primary dark:text-primary;
 }
