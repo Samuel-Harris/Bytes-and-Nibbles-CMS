@@ -1,230 +1,247 @@
-import { EntityReference, UploadedFileContext, buildCollection, buildProperty } from "@firecms/core";
+import {
+  EntityReference,
+  UploadedFileContext,
+  buildCollection,
+  buildProperty,
+} from "@firecms/core";
 
 interface Paragraph {
-    paragraph: string;
+  paragraph: string;
 }
 
 interface CaptionedImage {
-    image: string;
-    caption: string;
+  image: string;
+  caption: string;
 }
 
 interface Subsection {
-    title: string;
-    body: (Paragraph | CaptionedImage)[];
+  title: string;
+  body: (Paragraph | CaptionedImage)[];
+  isCollapsible?: boolean;
 }
 
 interface Section {
     title: string;
     body: (Subsection | Paragraph | CaptionedImage)[];
+    isCollapsible?: boolean;
 }
 
 export interface Byte {
-    title: string;
-    subtitle: string;
-    series: EntityReference;
-    slug: string;
-    thumbnail: string;
-    coverPhoto: string;
-    isPublished: boolean;
-    publishDate: Date;
-    lastModifiedDate: Date;
-    sections: Section[];
+  title: string;
+  subtitle: string;
+  series: EntityReference;
+  slug: string;
+  thumbnail: string;
+  coverPhoto: string;
+  isPublished: boolean;
+  publishDate: Date;
+  lastModifiedDate: Date;
+  sections: Section[];
 }
 
 const paragraphProperty = buildProperty({
-    dataType: "string",
-    name: "Paragraph",
-    markdown: true,
-    validation: {
-        required: true,
-    },
+  dataType: "string",
+  name: "Paragraph",
+  markdown: true,
+  validation: {
+    required: true,
+  },
 });
 
 const captionedImageProperty = buildProperty({
-    dataType: "map",
-    name: "Captioned image",
-    properties: {
-        image: buildProperty({
-            dataType: "string",
-            name: "Image",
-            storage: {
-                storagePath: "images/bytes/bodyImages",
-                acceptedFiles: ["image/*"],
-                metadata: {
-                    cacheControl: "max-age=1000000"
-                },
-                fileName: (context: UploadedFileContext) => {
-                    return context.file.name;
-                }
-            },
-            validation: {
-                required: true,
-            },
-        }),
-        caption: buildProperty({
-            dataType: "string",
-            name: "Caption",
-            markdown: true,
-            validation: {
-                required: true,
-            },
-        }),
-    }
+  dataType: "map",
+  name: "Captioned image",
+  properties: {
+    image: buildProperty({
+      dataType: "string",
+      name: "Image",
+      storage: {
+        storagePath: "images/bytes/bodyImages",
+        acceptedFiles: ["image/*"],
+        metadata: {
+          cacheControl: "max-age=1000000",
+        },
+        fileName: (context: UploadedFileContext) => {
+          return context.file.name;
+        },
+      },
+      validation: {
+        required: true,
+      },
+    }),
+    caption: buildProperty({
+      dataType: "string",
+      name: "Caption",
+      markdown: true,
+      validation: {
+        required: true,
+      },
+    }),
+  },
 });
 
 export const byteCollection = buildCollection<Byte>({
-    id: "bytes",
-    name: "Bytes",
-    singularName: "Byte",
-    path: "v1_bytes",
-    properties: {
-        title: buildProperty ({
+  id: "bytes",
+  name: "Bytes",
+  singularName: "Byte",
+  path: "v1_bytes",
+  properties: {
+    title: buildProperty({
+      dataType: "string",
+      name: "Title",
+      validation: {
+        required: true,
+        unique: true,
+      },
+    }),
+    subtitle: buildProperty({
+      dataType: "string",
+      name: "Subtitle",
+      validation: {
+        required: true,
+      },
+    }),
+    series: buildProperty({
+      dataType: "reference",
+      path: "v1_byte_series",
+      name: "Series",
+      validation: {
+        required: true,
+      },
+    }),
+    slug: buildProperty({
+      dataType: "string",
+      name: "Slug",
+      validation: {
+        required: true,
+        unique: true,
+        min: 5,
+        matches: "^[a-z][a-z0-9-]*[a-z0-9]+$",
+      },
+    }),
+    thumbnail: buildProperty({
+      dataType: "string",
+      name: "Thumbnail",
+      storage: {
+        storagePath: "images/bytes/thumbnails",
+        acceptedFiles: ["image/*"],
+        metadata: {
+          cacheControl: "max-age=1000000",
+        },
+        fileName: (context: UploadedFileContext) => {
+          return context.file.name;
+        },
+      },
+      validation: {
+        required: true,
+      },
+    }),
+    coverPhoto: buildProperty({
+      dataType: "string",
+      name: "Cover photo",
+      storage: {
+        storagePath: "images/bytes/coverPhotos",
+        acceptedFiles: ["image/*"],
+        metadata: {
+          cacheControl: "max-age=1000000",
+        },
+        fileName: (context: UploadedFileContext) => {
+          return context.file.name;
+        },
+      },
+      validation: {
+        required: true,
+      },
+    }),
+    isPublished: buildProperty({
+      dataType: "boolean",
+      name: "Is published?",
+      validation: {
+        required: true,
+      },
+    }),
+    publishDate: buildProperty({
+      dataType: "date",
+      name: "Publish date",
+      autoValue: "on_create",
+    }),
+    lastModifiedDate: buildProperty({
+      dataType: "date",
+      name: "Last modified date",
+      autoValue: "on_update",
+    }),
+    sections: buildProperty({
+      dataType: "array",
+      name: "Sections",
+      validation: {
+        required: true,
+        min: 1,
+      },
+      of: {
+        dataType: "map",
+        properties: {
+          title: buildProperty({
             dataType: "string",
-            name: "Title",
+            name: "Heading",
             validation: {
-                required: true,
-                unique: true,
+              required: true,
             },
-        }),
-        subtitle: buildProperty ({
-            dataType: "string",
-            name: "Subtitle",
-            validation: {
-                required: true,
-            },
-        }),
-        series: buildProperty({
-            dataType: "reference",
-            path: "v1_byte_series",
-            name: "Series",
-            validation: {
-                required: true,
-            },
-        }),
-        slug: buildProperty ({
-            dataType: "string",
-            name: "Slug",
-            validation: {
-                required: true,
-                unique: true,
-                min: 5,
-                matches: "^[a-z][a-z0-9-]*[a-z0-9]+$"
-            },
-        }),
-        thumbnail: buildProperty({
-            dataType: "string",
-            name: "Thumbnail",
-            storage: {
-                storagePath: "images/bytes/thumbnails",
-                acceptedFiles: ["image/*"],
-                metadata: {
-                    cacheControl: "max-age=1000000"
-                },
-                fileName: (context: UploadedFileContext) => {
-                    return context.file.name;
-                }
-            },
-            validation: {
-                required: true,
-            },
-        }),
-        coverPhoto: buildProperty({
-            dataType: "string",
-            name: "Cover photo",
-            storage: {
-                storagePath: "images/bytes/coverPhotos",
-                acceptedFiles: ["image/*"],
-                metadata: {
-                    cacheControl: "max-age=1000000"
-                },
-                fileName: (context: UploadedFileContext) => {
-                    return context.file.name;
-                }
-            },
-            validation: {
-                required: true,
-            },
-        }),
-        isPublished: buildProperty ({
+          }),
+          isCollapsible: buildProperty({
             dataType: "boolean",
-            name: "Is published?",
-            validation: {
-                required: true,
-            },
-        }),
-        publishDate: buildProperty ({
-            dataType: "date",
-            name: "Publish date",
-            autoValue: "on_create"
-        }),
-        lastModifiedDate: buildProperty ({
-            dataType: "date",
-            name: "Last modified date",
-            autoValue: "on_update"
-        }),
-        sections: buildProperty ({
+            name: "Is collapsible?",
+            defaultValue: false,
+          }),
+          body: buildProperty({
             dataType: "array",
-            name: "Sections",
+            name: "Section body",
             validation: {
-                required: true,
-                min: 1,
+              required: true,
             },
-            of: {
-                dataType: "map",
-                properties: {
+            oneOf: {
+              typeField: "type",
+              valueField: "value",
+              properties: {
+                subsection: buildProperty({
+                  dataType: "map",
+                  name: "Subsection",
+                  properties: {
                     title: buildProperty({
-                        dataType: "string",
-                        name: "Heading",
-                        validation: {
-                            required: true
-                        },
+                      dataType: "string",
+                      name: "Subheading",
+                      validation: {
+                        required: true,
+                      },
                     }),
                     body: buildProperty({
-                        dataType: "array",
-                        name: "Section body",
-                        validation: {
-                            required: true
+                      dataType: "array",
+                      name: "Subsection body",
+                      validation: {
+                        required: true,
+                      },
+                      oneOf: {
+                        typeField: "type",
+                        valueField: "value",
+                        properties: {
+                          paragraph: paragraphProperty,
+                          captionedImage: captionedImageProperty,
                         },
-                        oneOf: {
-                            typeField: "type",
-                            valueField: "value",
-                            properties: {
-                                subsection: buildProperty ({
-                                    dataType: "map",
-                                    name: "Subsection",
-                                    properties: {
-                                        title: buildProperty({
-                                            dataType: "string",
-                                            name: "Subheading",
-                                            validation: {
-                                                required: true
-                                            },
-                                        }),
-                                        body: buildProperty({
-                                            dataType: "array",
-                                            name: "Subsection body",
-                                            validation: {
-                                                required: true
-                                            },
-                                            oneOf: {
-                                                typeField: "type",
-                                                valueField: "value",
-                                                properties: {
-                                                    paragraph: paragraphProperty,
-                                                    captionedImage: captionedImageProperty,
-                                                }
-                                            }
-                                        }),
-                                    }, 
-                                }),
-                                paragraph: paragraphProperty,
-                                captionedImage: captionedImageProperty,
-                            }
-                        }
+                      },
                     }),
-                }, 
-            }
-        }),
-    }
+                    isCollapsible: buildProperty({
+                      dataType: "boolean",
+                      name: "Is collapsible?",
+                      defaultValue: false,
+                    }),
+                  },
+                }),
+                paragraph: paragraphProperty,
+                captionedImage: captionedImageProperty,
+              },
+            },
+          }),
+        },
+      },
+    }),
+  },
 });
