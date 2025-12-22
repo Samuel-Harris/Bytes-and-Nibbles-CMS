@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "vite --mode development",
-    "build": "vite build && tsc",
+    "build": "tsc && vite build",
     "preview": "vite build && vite preview",
     "deploy": "vite build && firebase deploy --only hosting --project bytes-and-nibbles"
   },

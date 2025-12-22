@@ -1,6 +1,6 @@
 {
-  "short_name": "FireCMS",
-  "name": "FireCMS demo app",
+  "short_name": "Bytes & Nibbles",
+  "name": "Bytes and Nibbles CMS",
   "icons": [
     {
       "src": "logo.png",
@@ -14,7 +14,7 @@
     }
   ],
   "start_url": ".",
-  "display": "fullscreen",
+  "display": "standalone",
   "theme_color": "#0070f4",
   "background_color": "#ffffff"
 }

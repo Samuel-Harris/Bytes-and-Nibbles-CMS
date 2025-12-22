@@ -11,5 +11,5 @@ export default defineConfig({
     sourcemap: true,
   },
   optimizeDeps: { include: ["react/jsx-runtime"] },
-  plugins: [react({})],
+  plugins: [react()],
 });

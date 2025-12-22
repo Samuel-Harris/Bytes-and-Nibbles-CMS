@@ -56,11 +56,13 @@ Before you begin, ensure you have the following installed:
    git clone <repository-url>
    cd bytes-and-nibbles-cms
    ```
+   
 2. **Install dependencies**
 
    ```bash
    pnpm install
    ```
+
 3. **Firebase Configuration**
 
    - The Firebase configuration is already set up in `src/firebase_config.ts`
