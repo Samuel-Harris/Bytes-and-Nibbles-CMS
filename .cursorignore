@@ -1,0 +1,4 @@
+# firebase config
+src/firebase_config.ts
+firestore.rules
+storage.rules

@@ -1,164 +1,208 @@
 # Bytes and Nibbles CMS
 
-The Content Management System (CMS) for my tech and food blog: [Bytes and Nibbles](https://bytes-and-nibbles.web.app). Built with [FireCMS](https://firecms.co/), this CMS allows easy management of blog content including tech articles ("Bytes"), article series ("ByteSeries"), and food recipes ("Nibbles").
+A headless content management system built with [FireCMS](https://firecms.co/) for managing "Bytes" (articles/blog posts) and "Nibbles" (recipes). This CMS provides a user-friendly interface for creating, editing, and publishing structured content with rich media support.
 
-## 🚀 Quick Start
+## Features
 
-### Prerequisites
+### Content Types
 
-- [Node.js](https://nodejs.org/) (version 16 or higher)
-- [Firebase](https://firebase.google.com/) account and project
+#### Bytes (Articles/Blog Posts)
+
+- **Structured Content**: Create articles with hierarchical sections and subsections
+- **Rich Text Support**: Markdown-enabled paragraphs and captions
+- **Media Management**: Upload and manage images for thumbnails, cover photos, and inline content
+- **Series Organization**: Group related bytes into series with custom accent colors
+- **Publishing Workflow**: Control publication status and track modification dates
+- **SEO-Friendly**: Unique slugs for URL generation
+
+#### Nibbles (Recipes)
+
+- **Recipe Management**: Complete recipe entries with ingredients, steps, and metadata
+- **Ingredient Tracking**: Structured ingredient lists with quantities and measurements
+- **Step-by-Step Instructions**: Ordered cooking/preparation steps
+- **Media Support**: Recipe photos and thumbnails
+- **Serving Information**: Track number of servings and preparation time
+
+#### Byte Series (Categories)
+
+- **Content Organization**: Group bytes into thematic series
+- **Visual Branding**: Custom accent colors for each series
+- **Color Preview**: Visual color picker with live preview
+
+## Technology Stack
+
+- **Frontend Framework**: React 19 with TypeScript
+- **CMS Framework**: FireCMS v3
+- **Database**: Firebase Firestore
+- **File Storage**: Firebase Storage
+- **Hosting**: Firebase Hosting
+- **Styling**: Tailwind CSS with Typography plugin
+- **Build Tool**: Vite
+- **Package Manager**: pnpm
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [pnpm](https://pnpm.io/) package manager
 - [Firebase CLI](https://firebase.google.com/docs/cli) (for deployment)
 
-### Installation
+## Installation
 
-1. **Clone the repository:**
+1. **Clone the repository**
+
    ```bash
-   git clone https://github.com/Samuel-Harris/Bytes-and-Nibbles-CMS.git
+   git clone <repository-url>
    cd bytes-and-nibbles-cms
    ```
+2. **Install dependencies**
 
-2. **Install dependencies:**
    ```bash
-   npm install
+   pnpm install
    ```
+3. **Firebase Configuration**
 
-3. **Set up Firebase configuration:**
-   - Create a new Firebase project at [https://console.firebase.google.com/](https://console.firebase.google.com/)
-   - Enable Firestore Database, Firebase Storage, and Firebase Authentication
-   - Generate your Firebase configuration and create the missing config files (see [Config Files](#config-files) section below)
+   - The Firebase configuration is already set up in `src/firebase_config.ts`
+   - Make sure you have access to the "bytes-and-nibbles" Firebase project
+   - Set up authentication rules as needed (see App.tsx for current auth logic)
 
-### Development
+## Development
 
-4. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
+### Start Development Server
 
-5. **Open your browser:**
-   Navigate to [http://localhost:5173](http://localhost:5173) to access the CMS.
+```bash
+pnpm run dev
+```
 
-Changes made in the CMS will automatically sync with your Firebase project.
+The CMS will be available at `http://localhost:5173` (or your configured Vite port).
 
-## 📜 Available Scripts
+### Authentication
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build the project for production
-- `npm run preview` - Preview the production build locally
-- `npm run lint` - Run ESLint to check code quality
-- `npm run deploy` - Build and deploy to Firebase (requires Firebase CLI setup)
+- The CMS uses Firebase Authentication with Google and email/password sign-in
+- Current auth logic restricts access based on email domains
+- Admin access is granted to users with `admin` custom claim or `@firecms.co` emails
 
-## 🏗️ Project Structure
+### Content Management
+
+#### Creating a Byte (Article)
+
+1. Navigate to the "Bytes" collection in the sidebar
+2. Click "Add new entry"
+3. Fill in the required fields:
+   - **Title**: Article title
+   - **Subtitle**: Brief description
+   - **Series**: Select from existing byte series
+   - **Slug**: URL-friendly identifier (auto-generated or manual)
+   - **Thumbnail & Cover Photo**: Upload images
+   - **Sections**: Add structured content with headings, paragraphs, and images
+4. Set "Is published?" to control visibility
+5. Save your changes
+
+#### Creating a Nibble (Recipe)
+
+1. Navigate to the "Nibbles" collection
+2. Click "Add new entry"
+3. Fill in recipe details:
+   - **Title**: Recipe name
+   - **Source**: Recipe origin or author
+   - **Number of servings**: How many people it serves
+   - **Time taken**: Preparation/cooking time in minutes
+   - **Ingredients**: Add ingredients with quantities and measurements
+   - **Steps**: List preparation instructions in order
+4. Upload thumbnail and cover photos
+5. Publish when ready
+
+#### Managing Byte Series
+
+1. Go to "Byte series" collection
+2. Create new series with titles and accent colors
+3. Use the color picker to select brand-appropriate colors
+
+## Building and Deployment
+
+### Production Build
+
+```bash
+pnpm run build
+```
+
+### Preview Build Locally
+
+```bash
+pnpm run preview
+```
+
+### Deploy to Firebase
+
+```bash
+pnpm run deploy
+```
+
+This command builds the project and deploys it to Firebase Hosting under the "bytes-and-nibbles" project.
+
+## Project Structure
 
 ```
 src/
-├── collections/          # Content collection definitions
-│   ├── bytes.tsx        # Tech articles collection
-│   ├── byteSeries.tsx   # Article series collection
-│   └── nibbles.tsx      # Food recipes collection
-├── App.tsx              # Main application component
-├── firebase-config.ts   # Firebase configuration (you need to create this)
-├── index.css            # Global styles
-└── main.tsx             # Application entry point
+├── collections/          # Content type definitions
+│   ├── bytes.tsx        # Byte (article) collection schema
+│   ├── byteSeries.tsx   # Series collection with color picker
+│   └── nibbles.tsx      # Recipe collection schema
+├── components/          # Custom UI components
+│   └── ColorField.tsx   # Color picker component
+├── firebase_config.ts   # Firebase configuration
+├── App.tsx             # Main CMS application
+└── main.tsx           # Application entry point
 ```
 
-## 🛠️ Technologies Used
+## Content Schema Details
 
-- **[FireCMS](https://firecms.co/)** - Headless CMS framework
-- **[React](https://reactjs.org/)** - UI library
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-- **[Firebase](https://firebase.google.com/)** - Backend services (Firestore, Storage, Auth)
-- **[Material-UI](https://mui.com/)** - React components library
-- **[Vite](https://vitejs.dev/)** - Build tool and development server
-- **[React Router](https://reactrouter.com/)** - Client-side routing
+### Byte Structure
 
-## Config Files
+- **Sections**: Hierarchical content with headings
+- **Subsections**: Nested content organization
+- **Content Blocks**: Paragraphs (markdown) and captioned images
+- **Media Storage**: Images stored in Firebase Storage under `images/bytes/`
 
-For the public version of this repo, I have removed the following files, which you need to implement yourself:
+### Nibble Structure
 
-- `firestore.rules` - Firestore security rules
-- `storage.rules` - Firebase Storage security rules
-- `src/firebase-config.ts` - Firebase project configuration
+- **Ingredients**: Structured list with name, quantity, measurement, optional flag
+- **Steps**: Ordered array of preparation instructions
+- **Metadata**: Cooking time, servings, source information
 
-### Setting up Firebase Config Files
+## Security & Permissions
 
-1. **Firebase Configuration (`src/firebase-config.ts`):**
-   ```typescript
-   export const firebaseConfig = {
-     apiKey: "your-api-key",
-     authDomain: "your-project.firebaseapp.com",
-     projectId: "your-project-id",
-     storageBucket: "your-project.appspot.com",
-     messagingSenderId: "123456789",
-     appId: "your-app-id"
-   };
-   ```
+- Firebase Security Rules are defined in `src/firestore.rules` and `src/storage.rules`
+- Authentication is handled through Firebase Auth
+- Current setup allows access to users with specific email domains
+- Admin privileges granted via custom claims
 
-2. **Firestore Rules (`firestore.rules`):**
-   Basic rules for content management:
-   ```javascript
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /{document=**} {
-         allow read, write: if request.auth != null;
-       }
-     }
-   }
-   ```
+## Customization
 
-3. **Storage Rules (`storage.rules`):**
-   Basic rules for file uploads:
-   ```javascript
-   rules_version = '2';
-   service firebase.storage {
-     match /b/{bucket}/o {
-       match /{allPaths=**} {
-         allow read, write: if request.auth != null;
-       }
-     }
-   }
-   ```
+### Adding New Content Types
 
-Learn how to write your own authorisation-defining .rules files [here](https://firebase.google.com/docs/rules/basics).
+1. Create a new collection file in `src/collections/`
+2. Define your data structure using FireCMS `buildCollection` and `buildProperty`
+3. Import and add the collection to the `collections` array in `App.tsx`
 
-Learn how to generate your own firebase-config.ts file [here](https://support.google.com/firebase/answer/7015592).
+### Modifying Authentication
 
-## 🚀 Deployment
+Edit the `myAuthenticator` function in `App.tsx` to customize access control logic.
 
-To deploy the CMS to Firebase Hosting:
+### Custom Fields
 
-1. **Install Firebase CLI:**
-   ```bash
-   npm install -g firebase-tools
-   ```
+Create custom field components in `src/components/` and reference them in your collection schemas.
 
-2. **Login to Firebase:**
-   ```bash
-   firebase login
-   ```
+## Contributing
 
-3. **Initialize Firebase in your project:**
-   ```bash
-   firebase init
-   ```
-   Select Hosting, Firestore, and Storage when prompted.
+1. Follow the existing code structure and TypeScript patterns
+2. Test content creation workflows thoroughly
+3. Ensure proper validation is in place for required fields
+4. Update this README when adding new features
 
-4. **Deploy:**
-   ```bash
-   npm run deploy
-   ```
+## Support
 
-## 📝 Content Management
+For FireCMS-specific documentation, visit [firecms.co](https://firecms.co/).
 
-The CMS manages three main content types:
-
-- **Bytes** - Individual tech articles
-- **ByteSeries** - Collections of related tech articles
-- **Nibbles** - Food recipes and culinary content
-
-Each collection has its own configuration defining fields, validation rules, and display options in the `src/collections/` directory.
-
-## 📄 License
-
-This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+For Firebase setup and configuration, refer to the [Firebase Documentation](https://firebase.google.com/docs).
