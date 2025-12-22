@@ -56,7 +56,7 @@ Before you begin, ensure you have the following installed:
    git clone <repository-url>
    cd bytes-and-nibbles-cms
    ```
-   
+
 2. **Install dependencies**
 
    ```bash
