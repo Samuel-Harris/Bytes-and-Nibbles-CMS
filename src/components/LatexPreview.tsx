@@ -39,17 +39,30 @@ const LatexContentField = ({
 
   // Render LaTeX whenever content changes
   useEffect(() => {
-    if (!isReady || !previewRef.current || !value) return;
+    if (!isReady || !previewRef.current || !value) {
+      setRenderError(null);
+      return;
+    }
 
     try {
       const MathJax = (window as any).MathJax;
+      if (!MathJax) {
+        setRenderError("MathJax not loaded");
+        return;
+      }
+
       MathJax.texReset();
       MathJax.typesetClear();
-      MathJax.typesetPromise([previewRef.current]).catch((err: any) => {
-        console.warn("MathJax render error", err);
-        setRenderError("LaTeX rendering failed");
-      });
-    } catch {
+      MathJax.typesetPromise([previewRef.current])
+        .then(() => {
+          setRenderError(null);
+        })
+        .catch((err: any) => {
+          console.warn("MathJax render error", err);
+          setRenderError(`LaTeX rendering failed: ${err.message || 'Unknown error'}`);
+        });
+    } catch (err) {
+      console.warn("LaTeX rendering error", err);
       setRenderError("LaTeX rendering error");
     }
   }, [value, isReady]);
@@ -80,7 +93,12 @@ const LatexContentField = ({
               ref={previewRef}
               className="prose prose-sm max-w-none dark:prose-invert"
             >
-              {`$$${value}$$`}
+              {/* Handle existing LaTeX delimiters */}
+              {value.startsWith('\\[') && value.endsWith('\\]')
+                ? value  // Use as-is if already display math delimited
+                : value.startsWith('\\(') && value.endsWith('\\)')
+                ? value  // Use as-is if already inline math delimited
+                : `$$${value}$$`}  {/* Add display math delimiters */}
             </div>
           )}
         </div>

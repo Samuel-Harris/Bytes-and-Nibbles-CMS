@@ -5,7 +5,7 @@ import {
   buildCollection,
   buildProperty,
 } from "@firecms/core";
-import LatexContentField from "../components/LatexPreview";
+import { ParagraphField } from "../components/ParagraphField";
 
 enum ParagraphKind {
   String = "string",
@@ -14,7 +14,8 @@ enum ParagraphKind {
 
 interface Paragraph {
   kind: ParagraphKind;
-  paragraph: string;
+  content?: string; // Markdown
+  latexContent?: string; // LaTeX
 }
 
 interface CaptionedImage {
@@ -50,42 +51,26 @@ export interface Byte {
 const paragraphProperty = buildProperty({
   dataType: "map",
   name: "Paragraph",
+  Field: ParagraphField,
   properties: {
-    kind: buildProperty({
+    type: buildProperty({
       dataType: "string",
-      name: "Paragraph type",
+      name: "Type",
       enumValues: {
-        Text: "text",
-        LaTeX: "latex",
+        String: "string",
+        Latex: "latex",
       },
-      defaultValue: "text",
+      defaultValue: "string",
       validation: {
         required: true,
       },
     }),
-    content: buildProperty({
+    paragraph: buildProperty({
       dataType: "string",
       name: "Content",
-      oneOf: {
-        typeField: "kind",
-        properties: {
-          text: buildProperty({
-            dataType: "string",
-            markdown: true,
-            name: "Text content",
-            validation: {
-              required: true,
-            },
-          }),
-          latex: buildProperty({
-            dataType: "string",
-            name: "LaTeX content",
-            Field: LatexContentField,
-            validation: {
-              required: true,
-            },
-          }),
-        },
+      markdown: true,
+      validation: {
+        required: true,
       },
     }),
   },
@@ -119,6 +104,36 @@ const captionedImageProperty = buildProperty({
       validation: {
         required: true,
       },
+    }),
+  },
+});
+
+const subsectionProperty = buildProperty({
+  dataType: "map",
+  name: "Subsection",
+  properties: {
+    title: buildProperty({
+      dataType: "string",
+      name: "Subheading",
+      validation: { required: true },
+    }),
+    body: buildProperty({
+      dataType: "array",
+      name: "Subsection body",
+      validation: { required: true },
+      oneOf: {
+        typeField: "type",
+        valueField: "value",
+        properties: {
+          paragraph: paragraphProperty,
+          captionedImage: captionedImageProperty,
+        },
+      },
+    }),
+    isCollapsible: buildProperty({
+      dataType: "boolean",
+      name: "Is collapsible?",
+      defaultValue: false,
     }),
   },
 });
@@ -245,35 +260,7 @@ export const byteCollection = buildCollection<Byte>({
               typeField: "type",
               valueField: "value",
               properties: {
-                subsection: buildProperty({
-                  dataType: "map",
-                  name: "Subsection",
-                  properties: {
-                    title: buildProperty({
-                      dataType: "string",
-                      name: "Subheading",
-                      validation: { required: true },
-                    }),
-                    body: buildProperty({
-                      dataType: "array",
-                      name: "Subsection body",
-                      validation: { required: true },
-                      oneOf: {
-                        typeField: "type",
-                        valueField: "value",
-                        properties: {
-                          paragraph: paragraphProperty,
-                          captionedImage: captionedImageProperty,
-                        },
-                      },
-                    }),
-                    isCollapsible: buildProperty({
-                      dataType: "boolean",
-                      name: "Is collapsible?",
-                      defaultValue: false,
-                    }),
-                  },
-                }),
+                subsection: subsectionProperty,
                 paragraph: paragraphProperty,
                 captionedImage: captionedImageProperty,
               },
