@@ -8,7 +8,7 @@ import {
 
 enum ParagraphType {
   String = "string",
-  Latex = "LaTeX",
+  Latex = "latex",
 }
 
 interface Paragraph {
@@ -54,8 +54,8 @@ const paragraphProperty = buildProperty({
       dataType: "string",
       name: "Type",
       enumValues: {
-        string: "String",
-        latex: "LaTeX",
+        String: "string",
+        Latex: "latex",
       },
       defaultValue: "string",
       validation: {
