@@ -27,8 +27,8 @@ export interface Nibble {
   timeTakenMinutes: number;
 }
 
-export const nibbleCollection = buildCollection<Nibble>({
-  id: "nibbles",
+export const v1NibbleCollection = buildCollection<Nibble>({
+  id: "v1_nibbles",
   name: "Nibbles",
   singularName: "Nibble",
   path: "v1_nibbles",

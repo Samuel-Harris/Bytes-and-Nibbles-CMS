@@ -5,15 +5,15 @@ import {
   buildCollection,
   buildProperty,
 } from "@firecms/core";
-
-enum ParagraphType {
-  String = "string",
-  Latex = "latex",
-}
+import { MarkdownParagraphField } from "../components/MarkdownParagraphField";
+import { LatexParagraphField } from "../components/LatexParagraphField";
 
 interface Paragraph {
-  type: ParagraphType;
-  paragraph: string;
+  paragraph: string; // Markdown content
+}
+
+interface LatexParagraph {
+  latexContent: string; // LaTeX content
 }
 
 interface CaptionedImage {
@@ -23,13 +23,13 @@ interface CaptionedImage {
 
 interface Subsection {
   title: string;
-  body: (Paragraph | CaptionedImage)[];
+  body: (Paragraph | LatexParagraph | CaptionedImage)[];
   isCollapsible?: boolean;
 }
 
 interface Section {
   title: string;
-  body: (Subsection | Paragraph | CaptionedImage)[];
+  body: (Subsection | Paragraph | LatexParagraph | CaptionedImage)[];
   isCollapsible?: boolean;
 }
 
@@ -46,30 +46,24 @@ export interface Byte {
   sections: Section[];
 }
 
+// Markdown paragraph (object with paragraph field)
 const paragraphProperty = buildProperty({
-  dataType: "map",
+  dataType: "string",
   name: "Paragraph",
-  properties: {
-    type: buildProperty({
-      dataType: "string",
-      name: "Type",
-      enumValues: {
-        String: "string",
-        Latex: "latex",
-      },
-      defaultValue: "string",
-      validation: {
-        required: true,
-      },
-    }),
-    paragraph: buildProperty({
-      dataType: "string",
-      name: "Content",
-      markdown: true,
-      validation: {
-        required: true,
-      },
-    }),
+  Field: MarkdownParagraphField,
+  markdown: true,
+  validation: {
+    required: true,
+  },
+});
+
+// LaTeX paragraph
+const latexParagraphProperty = buildProperty({
+  dataType: "string",
+  name: "LaTeX content",
+  Field: LatexParagraphField,
+  validation: {
+    required: true,
   },
 });
 
@@ -105,8 +99,39 @@ const captionedImageProperty = buildProperty({
   },
 });
 
+const subsectionProperty = buildProperty({
+  dataType: "map",
+  name: "Subsection",
+  properties: {
+    title: buildProperty({
+      dataType: "string",
+      name: "Subheading",
+      validation: { required: true },
+    }),
+    body: buildProperty({
+      dataType: "array",
+      name: "Subsection body",
+      validation: { required: true },
+      oneOf: {
+        typeField: "type",
+        valueField: "value",
+        properties: {
+          paragraph: paragraphProperty,
+          latexParagraph: latexParagraphProperty,
+          captionedImage: captionedImageProperty,
+        },
+      },
+    }),
+    isCollapsible: buildProperty({
+      dataType: "boolean",
+      name: "Is collapsible?",
+      defaultValue: false,
+    }),
+  },
+});
+
 export const byteCollection = buildCollection<Byte>({
-  id: "bytes",
+  id: "v1_bytes",
   name: "Bytes",
   singularName: "Byte",
   path: "v1_bytes",
@@ -227,40 +252,9 @@ export const byteCollection = buildCollection<Byte>({
               typeField: "type",
               valueField: "value",
               properties: {
-                subsection: buildProperty({
-                  dataType: "map",
-                  name: "Subsection",
-                  properties: {
-                    title: buildProperty({
-                      dataType: "string",
-                      name: "Subheading",
-                      validation: {
-                        required: true,
-                      },
-                    }),
-                    body: buildProperty({
-                      dataType: "array",
-                      name: "Subsection body",
-                      validation: {
-                        required: true,
-                      },
-                      oneOf: {
-                        typeField: "type",
-                        valueField: "value",
-                        properties: {
-                          paragraph: paragraphProperty,
-                          captionedImage: captionedImageProperty,
-                        },
-                      },
-                    }),
-                    isCollapsible: buildProperty({
-                      dataType: "boolean",
-                      name: "Is collapsible?",
-                      defaultValue: false,
-                    }),
-                  },
-                }),
+                subsection: subsectionProperty,
                 paragraph: paragraphProperty,
+                latexParagraph: latexParagraphProperty,
                 captionedImage: captionedImageProperty,
               },
             },
