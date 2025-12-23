@@ -20,6 +20,9 @@ importers:
       firebase:
         specifier: ^12.2.1
         version: 12.7.0
+      mathjax:
+        specifier: ^4.1.0
+        version: 4.1.0
       react:
         specifier: ^19.2.0
         version: 19.2.3
@@ -753,6 +756,9 @@ packages:
 
   '@material-design-icons/font@0.14.15':
     resolution: {integrity: sha512-h4YFZnYxNuciEKR0jAOekaQmIg2UGUSxbnoyzo4OdE42gy9QB3UnrjLcASiDy9ra8fqrcHy+NqxTHx7F86BH0A==}
+
+  '@mathjax/mathjax-newcm-font@4.1.0':
+    resolution: {integrity: sha512-n10AwYubUa2hyOzxSRzkwRrgCVns083zkentryXICMPKaWT/watfvK2sUk5D9Bow9mpDfoqb5EWApuUvqnlzaw==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2877,6 +2883,9 @@ packages:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
 
+  mathjax@4.1.0:
+    resolution: {integrity: sha512-53eDXzxk40pS2sdI6KDCPoreY95ADaGygbi41ExKmn3FYQ+QIdpquIU90eppecelzQjf74kpScyeplVPccnIJw==}
+
   mdast-util-from-markdown@2.0.2:
     resolution: {integrity: sha512-uZhTV/8NBuw0WHkPTrCqDOl0zVe1BIng5ZtHoDk49ME1qqcjYmmLmOf0gELgcRMxN4w2iuIeVso5/6QymSrgmA==}
 
@@ -4797,6 +4806,8 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@material-design-icons/font@0.14.15': {}
+
+  '@mathjax/mathjax-newcm-font@4.1.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -7152,6 +7163,10 @@ snapshots:
       uc.micro: 2.1.0
 
   math-intrinsics@1.1.0: {}
+
+  mathjax@4.1.0:
+    dependencies:
+      '@mathjax/mathjax-newcm-font': 4.1.0
 
   mdast-util-from-markdown@2.0.2:
     dependencies:

@@ -5,14 +5,15 @@ import {
   buildCollection,
   buildProperty,
 } from "@firecms/core";
+import LatexContentField from "../components/LatexPreview";
 
-enum ParagraphType {
+enum ParagraphKind {
   String = "string",
   Latex = "latex",
 }
 
 interface Paragraph {
-  type: ParagraphType;
+  kind: ParagraphKind;
   paragraph: string;
 }
 
@@ -50,24 +51,41 @@ const paragraphProperty = buildProperty({
   dataType: "map",
   name: "Paragraph",
   properties: {
-    type: buildProperty({
+    kind: buildProperty({
       dataType: "string",
-      name: "Type",
+      name: "Paragraph type",
       enumValues: {
-        String: "string",
-        Latex: "latex",
+        Text: "text",
+        LaTeX: "latex",
       },
-      defaultValue: "string",
+      defaultValue: "text",
       validation: {
         required: true,
       },
     }),
-    paragraph: buildProperty({
+    content: buildProperty({
       dataType: "string",
       name: "Content",
-      markdown: true,
-      validation: {
-        required: true,
+      oneOf: {
+        typeField: "kind",
+        properties: {
+          text: buildProperty({
+            dataType: "string",
+            markdown: true,
+            name: "Text content",
+            validation: {
+              required: true,
+            },
+          }),
+          latex: buildProperty({
+            dataType: "string",
+            name: "LaTeX content",
+            Field: LatexContentField,
+            validation: {
+              required: true,
+            },
+          }),
+        },
       },
     }),
   },
@@ -234,16 +252,12 @@ export const byteCollection = buildCollection<Byte>({
                     title: buildProperty({
                       dataType: "string",
                       name: "Subheading",
-                      validation: {
-                        required: true,
-                      },
+                      validation: { required: true },
                     }),
                     body: buildProperty({
                       dataType: "array",
                       name: "Subsection body",
-                      validation: {
-                        required: true,
-                      },
+                      validation: { required: true },
                       oneOf: {
                         typeField: "type",
                         valueField: "value",
