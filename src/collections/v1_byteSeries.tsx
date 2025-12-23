@@ -26,8 +26,8 @@ export const colorPreviewField: AdditionalFieldDelegate<ByteSeries> = {
   dependencies: ["accentColour"],
 };
 
-export const byteSeriesCollection = buildCollection<ByteSeries>({
-  id: "byte_series",
+export const v1ByteSeriesCollection = buildCollection<ByteSeries>({
+  id: "v1_byte_series",
   name: "Byte series",
   singularName: "Byte series",
   path: "v1_byte_series",

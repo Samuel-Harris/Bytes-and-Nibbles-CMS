@@ -5,17 +5,15 @@ import {
   buildCollection,
   buildProperty,
 } from "@firecms/core";
-import { ParagraphField } from "../components/ParagraphField";
-
-enum ParagraphKind {
-  String = "string",
-  Latex = "latex",
-}
+import { MarkdownParagraphField } from "../components/MarkdownParagraphField";
+import { LatexParagraphField } from "../components/LatexParagraphField";
 
 interface Paragraph {
-  kind: ParagraphKind;
-  content?: string; // Markdown
-  latexContent?: string; // LaTeX
+  paragraph: string; // Markdown content
+}
+
+interface LatexParagraph {
+  latexContent: string; // LaTeX content
 }
 
 interface CaptionedImage {
@@ -25,13 +23,13 @@ interface CaptionedImage {
 
 interface Subsection {
   title: string;
-  body: (Paragraph | CaptionedImage)[];
+  body: (Paragraph | LatexParagraph | CaptionedImage)[];
   isCollapsible?: boolean;
 }
 
 interface Section {
   title: string;
-  body: (Subsection | Paragraph | CaptionedImage)[];
+  body: (Subsection | Paragraph | LatexParagraph | CaptionedImage)[];
   isCollapsible?: boolean;
 }
 
@@ -48,31 +46,24 @@ export interface Byte {
   sections: Section[];
 }
 
+// Markdown paragraph (object with paragraph field)
 const paragraphProperty = buildProperty({
-  dataType: "map",
+  dataType: "string",
   name: "Paragraph",
-  Field: ParagraphField,
-  properties: {
-    type: buildProperty({
-      dataType: "string",
-      name: "Type",
-      enumValues: {
-        String: "string",
-        Latex: "latex",
-      },
-      defaultValue: "string",
-      validation: {
-        required: true,
-      },
-    }),
-    paragraph: buildProperty({
-      dataType: "string",
-      name: "Content",
-      markdown: true,
-      validation: {
-        required: true,
-      },
-    }),
+  Field: MarkdownParagraphField,
+  markdown: true,
+  validation: {
+    required: true,
+  },
+});
+
+// LaTeX paragraph
+const latexParagraphProperty = buildProperty({
+  dataType: "string",
+  name: "LaTeX content",
+  Field: LatexParagraphField,
+  validation: {
+    required: true,
   },
 });
 
@@ -126,6 +117,7 @@ const subsectionProperty = buildProperty({
         valueField: "value",
         properties: {
           paragraph: paragraphProperty,
+          latexParagraph: latexParagraphProperty,
           captionedImage: captionedImageProperty,
         },
       },
@@ -139,7 +131,7 @@ const subsectionProperty = buildProperty({
 });
 
 export const byteCollection = buildCollection<Byte>({
-  id: "bytes",
+  id: "v1_bytes",
   name: "Bytes",
   singularName: "Byte",
   path: "v1_bytes",
@@ -262,6 +254,7 @@ export const byteCollection = buildCollection<Byte>({
               properties: {
                 subsection: subsectionProperty,
                 paragraph: paragraphProperty,
+                latexParagraph: latexParagraphProperty,
                 captionedImage: captionedImageProperty,
               },
             },

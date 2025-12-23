@@ -29,9 +29,9 @@ import {
 import { CenteredView } from "@firecms/ui";
 
 import { firebaseConfig } from "./firebase_config";
-import { byteCollection } from "./collections/bytes";
-import { byteSeriesCollection } from "./collections/byteSeries";
-import { nibbleCollection } from "./collections/nibbles";
+import { byteCollection as v1ByteCollection } from "./collections/v1_bytes";
+import { v1ByteSeriesCollection } from "./collections/v1_byteSeries";
+import { v1NibbleCollection } from "./collections/v1_nibbles";
 
 function App() {
   // Use your own authentication logic here
@@ -55,7 +55,7 @@ function App() {
   );
 
   const collections = useMemo(
-    () => [byteCollection, byteSeriesCollection, nibbleCollection],
+    () => [v1ByteCollection, v1ByteSeriesCollection, v1NibbleCollection],
     []
   );
 
