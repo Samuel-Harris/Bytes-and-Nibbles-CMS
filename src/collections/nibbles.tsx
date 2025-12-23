@@ -1,4 +1,5 @@
 import {
+  EntityOnPreSaveProps,
   UploadedFileContext,
   buildCollection,
   buildProperty,
@@ -178,5 +179,17 @@ export const nibbleCollection = buildCollection<Nibble>({
         required: true,
       },
     }),
+  },
+  callbacks: {
+    onPreSave: async ({ values, previousValues }: EntityOnPreSaveProps) => {
+      if (
+        values.isPublished === true &&
+        previousValues?.isPublished === false
+      ) {
+        values.publishDate = new Date();
+      }
+
+      return values;
+    },
   },
 });

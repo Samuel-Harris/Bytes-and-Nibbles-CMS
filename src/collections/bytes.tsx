@@ -1,11 +1,18 @@
 import {
   EntityReference,
+  EntityOnPreSaveProps,
   UploadedFileContext,
   buildCollection,
   buildProperty,
 } from "@firecms/core";
 
+enum ParagraphType {
+  String = "string",
+  Latex = "LaTeX",
+}
+
 interface Paragraph {
+  type: ParagraphType;
   paragraph: string;
 }
 
@@ -21,9 +28,9 @@ interface Subsection {
 }
 
 interface Section {
-    title: string;
-    body: (Subsection | Paragraph | CaptionedImage)[];
-    isCollapsible?: boolean;
+  title: string;
+  body: (Subsection | Paragraph | CaptionedImage)[];
+  isCollapsible?: boolean;
 }
 
 export interface Byte {
@@ -40,11 +47,29 @@ export interface Byte {
 }
 
 const paragraphProperty = buildProperty({
-  dataType: "string",
+  dataType: "map",
   name: "Paragraph",
-  markdown: true,
-  validation: {
-    required: true,
+  properties: {
+    type: buildProperty({
+      dataType: "string",
+      name: "Type",
+      enumValues: {
+        string: "String",
+        latex: "LaTeX",
+      },
+      defaultValue: "string",
+      validation: {
+        required: true,
+      },
+    }),
+    paragraph: buildProperty({
+      dataType: "string",
+      name: "Content",
+      markdown: true,
+      validation: {
+        required: true,
+      },
+    }),
   },
 });
 
@@ -243,5 +268,17 @@ export const byteCollection = buildCollection<Byte>({
         },
       },
     }),
+  },
+  callbacks: {
+    onPreSave: async ({ values, previousValues }: EntityOnPreSaveProps) => {
+      if (
+        values.isPublished === true &&
+        previousValues?.isPublished === false
+      ) {
+        values.publishDate = new Date();
+      }
+
+      return values;
+    },
   },
 });
