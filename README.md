@@ -1,6 +1,8 @@
-# Bytes and Nibbles CMS
+# Bytes and Nibbles CMS (archived)
 
 A headless content management system built with [FireCMS](https://firecms.co/) for managing "Bytes" (articles/blog posts) and "Nibbles" (recipes). This CMS provides a user-friendly interface for creating, editing, and publishing structured content with rich media support.
+
+**N.B., this repo has been archived and its code has been moved into its sister repo, [Bytes and Nibbles Website](https://github.com/Samuel-Harris/Bytes-and-Nibbles-Website) to form a monorepo which will continue to be worked on.**
 
 ## Features
 
